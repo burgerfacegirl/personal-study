@@ -1,0 +1,31 @@
+/* .card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+} */
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.loginForm input {
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+}
+
+.loginForm input:focus {
+  border: 0;
+  background-color: rgb(234, 234, 234);
+}
+
+.loginButtons button {
+  background-color: rgba(0, 31, 92, 1);
+  color: white;
+  font-size: 0.8rem;
+  padding: 10px 15px;
+  margin: 5px 10px;
+}
