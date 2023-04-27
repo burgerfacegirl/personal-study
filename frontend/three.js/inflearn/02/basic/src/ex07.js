@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-// ----- 주제 : 기본 장면
+// ----- 주제 : Fog(안개)
 
 export default function example() {
   // Renderer
@@ -22,6 +22,7 @@ export default function example() {
   // Scene
   const scene = new THREE.Scene();
   // scene.background = new THREE.Color("blue");
+  scene.fog = new THREE.Fog("black", 3, 7);
 
   // Camera
   // Perspective Camera(원근 카메라)
@@ -33,15 +34,16 @@ export default function example() {
   );
 
   // camera 위치를 설정안했으면 기본적으로 x 0, y 0, z 0
-  camera.position.x = 2;
-  camera.position.y = 2;
+  // camera.position.x = 2;
+  camera.position.y = 1;
   camera.position.z = 5;
   scene.add(camera);
 
   // Light
   const light = new THREE.DirectionalLight(0xffffff, 50);
   light.position.x = 1;
-  light.position.z = 2;
+  light.position.y = 5;
+  light.position.z = 10;
   scene.add(light);
 
   // Mesh
@@ -51,31 +53,35 @@ export default function example() {
     color: "red",
   });
 
-  const mesh = new THREE.Mesh(geometry, material);
+  const meshes = [];
+  let mesh;
+  for (let i = 0; i < 10; i++) {
+    mesh = new THREE.Mesh(geometry, material);
+    mesh.position.x = Math.random() * 5 - 2.5;
+    mesh.position.z = Math.random() * 5 - 2.5;
+    scene.add(mesh);
+    meshes.push(mesh);
+  }
 
   scene.add(mesh);
 
   // 그리기
-  const clock = new THREE.Clock();
+  let time = Date.now();
   function draw() {
-    // console.log(clock.getElapsedTime());
-    // const time = clock.getElapsedTime();
+    const newTime = Date.now();
+    const deltaTime = newTime - time;
+    time = newTime;
 
-    // draw함수 실행 간격 시간
-    const delta = clock.getDelta();
-    // mesh.rotation.y += 0.1;
-    // mesh.rotation.y += THREE.MathUtils.degToRad(1);
-    mesh.rotation.y += 2 * delta;
+    meshes.forEach((item) => {
+      item.rotation.y += deltaTime * 0.001;
+    });
+
     renderer.render(scene, camera);
-    mesh.position.y += 0.01;
-    if (mesh.position.y > 3) {
-      mesh.position.y = 0;
-    }
-    window.requestAnimationFrame(draw);
-    // renderer.setAnimationLoop(draw);
+    requestAnimationFrame(draw);
+    renderer.setAnimationLoop(draw);
   }
   draw();
-  // window.requestAnimationFrame(draw);
+  // window.reender(scene, camera);
 
   function setSize() {
     // 카메라

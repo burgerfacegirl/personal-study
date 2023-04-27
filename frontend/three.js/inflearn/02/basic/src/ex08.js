@@ -1,6 +1,6 @@
 import * as THREE from "three";
-
-// ----- 주제 : 기본 장면
+import gsap from "gsap";
+// ----- 주제 : 외부 라이브러리를 이용한 애니메이션
 
 export default function example() {
   // Renderer
@@ -22,6 +22,7 @@ export default function example() {
   // Scene
   const scene = new THREE.Scene();
   // scene.background = new THREE.Color("blue");
+  scene.fog = new THREE.Fog("black", 3, 7);
 
   // Camera
   // Perspective Camera(원근 카메라)
@@ -33,15 +34,16 @@ export default function example() {
   );
 
   // camera 위치를 설정안했으면 기본적으로 x 0, y 0, z 0
-  camera.position.x = 2;
-  camera.position.y = 2;
+  // camera.position.x = 2;
+  camera.position.y = 1;
   camera.position.z = 5;
   scene.add(camera);
 
   // Light
   const light = new THREE.DirectionalLight(0xffffff, 50);
   light.position.x = 1;
-  light.position.z = 2;
+  light.position.y = 5;
+  light.position.z = 10;
   scene.add(light);
 
   // Mesh
@@ -56,27 +58,23 @@ export default function example() {
   scene.add(mesh);
 
   // 그리기
-  const clock = new THREE.Clock();
+  let time = Date.now();
   function draw() {
-    // console.log(clock.getElapsedTime());
-    // const time = clock.getElapsedTime();
+    const newTime = Date.now();
+    const deltaTime = newTime - time;
+    time = newTime;
 
-    // draw함수 실행 간격 시간
-    const delta = clock.getDelta();
-    // mesh.rotation.y += 0.1;
-    // mesh.rotation.y += THREE.MathUtils.degToRad(1);
-    mesh.rotation.y += 2 * delta;
     renderer.render(scene, camera);
-    mesh.position.y += 0.01;
-    if (mesh.position.y > 3) {
-      mesh.position.y = 0;
-    }
     window.requestAnimationFrame(draw);
     // renderer.setAnimationLoop(draw);
   }
   draw();
-  // window.requestAnimationFrame(draw);
 
+  // gsap
+  gsap.to(mesh.position, {
+    duration: 1,
+    y: 2,
+  });
   function setSize() {
     // 카메라
     camera.aspect = window.innerWidth / window.innerHeight;
